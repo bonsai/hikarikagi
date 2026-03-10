@@ -781,8 +781,12 @@
     <!-- Hidden canvas for OpenCV processing -->
     <canvas id="processCanvas" style="display: none;"></canvas>
 
+    <script async src="opencv.js" onload="onOpenCvLoaded()" onerror="onOpenCvError()"></script>
+
     <script>
         // ==================== OPENCV / CAMERA HANDLERS ====================
+        let cvReady = false;
+
         function onOpenCvLoaded() {
             cvReady = true;
             const statusVal = document.getElementById('statusValue');
@@ -799,14 +803,12 @@
             const loadingSub = document.querySelector('.loading-sub');
             if (loadingSub) loadingSub.textContent = 'Detection disabled. Check CORS/Network.';
         }
-    </script>
 
-    <script>
         // ==================== MODE SWITCHING ====================
         function switchMode(mode) {
             document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-            
+
             if (mode === 'transceiver') {
                 document.querySelector('.mode-tab:first-child').classList.add('active');
                 document.getElementById('transceiverSection').classList.add('active');
@@ -816,15 +818,6 @@
             }
         }
 
-        // ページロード時に即座にカメラを起動
-        window.onload = () => {
-            startCamera();
-        };
-    </script>
-
-    <script async src="opencv.js" onload="onOpenCvLoaded()" onerror="onOpenCvError()"></script>
-
-    <script>
         // ==================== TRANSCEIVER TRANSMITTER ====================
         let charDuration = 500;
         let frameDuration = 250;
@@ -1090,7 +1083,6 @@
         });
 
         // ==================== OPENCV CAMERA RECEIVER ====================
-        let cvReady = false;
         let video = null;
         let canvas = null;
         let ctx = null;
@@ -1181,7 +1173,7 @@
         }
 
         function processFrame() {
-            if (!isProcessing && cvReady) {
+            if (!isProcessing && cvReady && canvas && ctx && overlay) {
                 isProcessing = true;
                 try {
                     processCtx.drawImage(video, 0, 0, processCanvas.width, processCanvas.height);
@@ -1471,6 +1463,11 @@
         });
 
         document.getElementById('thresholdValue').textContent = brightnessThreshold;
+
+        // ページロード時に即座にカメラを起動
+        window.onload = () => {
+            startCamera();
+        };
     </script>
 </body>
 </html>
