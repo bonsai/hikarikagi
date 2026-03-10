@@ -556,7 +556,7 @@
 </head>
 <body>
     <!-- Loading overlay for OpenCV -->
-    <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text">Loading OpenCV.js...</div>
         <div class="loading-sub">This may take a few seconds</div>
@@ -567,12 +567,12 @@
 
     <!-- Mode Tabs -->
     <div class="mode-tabs">
-        <div class="mode-tab active" onclick="switchMode('transceiver')">◈ TRANSCEIVER</div>
-        <div class="mode-tab" onclick="switchMode('receiver')">◈ CAMERA RECEIVER</div>
+        <div class="mode-tab" onclick="switchMode('transceiver')">◈ TRANSCEIVER</div>
+        <div class="mode-tab active" onclick="switchMode('receiver')">◈ CAMERA RECEIVER</div>
     </div>
 
     <!-- Transceiver Section -->
-    <div class="section active" id="transceiverSection">
+    <div class="section" id="transceiverSection">
         <div class="container">
             <!-- Transmitter Panel -->
             <div class="panel">
@@ -680,7 +680,7 @@
     </div>
 
     <!-- Camera Receiver Section -->
-    <div class="section" id="receiverSection">
+    <div class="section active" id="receiverSection">
         <div class="container">
             <!-- Camera Panel -->
             <div class="panel">
@@ -1106,6 +1106,8 @@
         function onOpenCvLoaded() {
             cvReady = true;
             document.getElementById('loadingOverlay').classList.add('hidden');
+            // OpenCV ロード後にカメラを自動起動
+            startCamera();
         }
 
         function onOpenCvError() {
