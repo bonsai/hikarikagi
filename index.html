@@ -782,23 +782,7 @@
     <canvas id="processCanvas" style="display: none;"></canvas>
 
     <script>
-        // ==================== MODE SWITCHING ====================
-        function switchMode(mode) {
-            document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-            
-            if (mode === 'transceiver') {
-                document.querySelector('.mode-tab:first-child').classList.add('active');
-                document.getElementById('transceiverSection').classList.add('active');
-            } else {
-                document.querySelector('.mode-tab:last-child').classList.add('active');
-                document.getElementById('receiverSection').classList.add('active');
-            }
-        }
-
         // ==================== OPENCV / CAMERA HANDLERS ====================
-        let cvReady = false;
-
         function onOpenCvLoaded() {
             cvReady = true;
             const statusVal = document.getElementById('statusValue');
@@ -814,6 +798,22 @@
             if (loadingText) loadingText.textContent = 'OpenCV Load Error';
             const loadingSub = document.querySelector('.loading-sub');
             if (loadingSub) loadingSub.textContent = 'Detection disabled. Check CORS/Network.';
+        }
+    </script>
+
+    <script>
+        // ==================== MODE SWITCHING ====================
+        function switchMode(mode) {
+            document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            
+            if (mode === 'transceiver') {
+                document.querySelector('.mode-tab:first-child').classList.add('active');
+                document.getElementById('transceiverSection').classList.add('active');
+            } else {
+                document.querySelector('.mode-tab:last-child').classList.add('active');
+                document.getElementById('receiverSection').classList.add('active');
+            }
         }
 
         // ページロード時に即座にカメラを起動
@@ -1445,6 +1445,7 @@
 
             const charBoxes = msgDisplay.querySelectorAll('.char-box');
             charBoxes.forEach((box, i) => {
+                const boxRect = box.getBoundingClientRect();
                 const bx = relX + (boxRect.left - msgRect.left);
                 const by = relY + (boxRect.top - msgRect.top);
                 ctx.fillStyle = box.classList.contains('received') ? 'rgba(0,255,204,0.08)' :
